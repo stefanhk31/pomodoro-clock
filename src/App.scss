@@ -1,16 +1,31 @@
+body {
+    background-color: gray;
+    display: flex;
+    justify-content: center;
+}
+
 .container-clock {
-    width: 100vw;
-    margin: 0;
+    width: 90vw;
+    margin: .5em .5em .5em 1em;
     padding: 1em;
+    background-color: white;
     border: 3px solid black;
     border-radius: 10px;
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: space-between;
+    .header-row {
+        padding-bottom: .5em;
+    }
     .settings-row {
         justify-content: space-between;
         padding-bottom: .5em;
+        #session-label {
+            padding: 0 .5em;
+        }
+        #break-label {
+            padding: 0 .5em;
+        }
     }
     .display-row {
         padding-bottom: .5em;
@@ -20,18 +35,30 @@
 @media screen and (min-width: 600px) {
     .container-clock {
         width: 50vw;
-        margin: 2em 2em;
+        margin: 3em;
+        .settings-row {
+            #timer-label {
+                padding-left: 4em;
+            }
+        }
+    }
+}
+
+@media screen and (min-width: 900px) {
+    .container-clock {
+        width: 40vw;
     }
 }
 
 @media screen and (min-width: 1200px) {
     .container-clock {
-        width: 25vw;
-        margin: 1em 1em;
-        .settings-row {
-            #timer-label {
-                padding-left: 3.5em;
-            }
-        }
+        width: 30vw;
+        margin: 5em;
+    }
+}
+
+@media screen and (min-width: 1800px) {
+    .container-clock {
+        width: 20vw;
     }
 }

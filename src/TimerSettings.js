@@ -7,25 +7,34 @@ class TimerSettings extends Component {
 
         this.handleSessionClick = this.handleSessionClick.bind(this);
         this.handleBreakClick = this.handleBreakClick.bind(this);
-        this.chooseTimerLabel = this.chooseTimerLabel.bind(this);
     }
 
     //increment/decrement session and break times when user clicks + and - buttons
+    //handleSessionClick has to update currentTime, as well, so that main clock will reflect initial adjustments
     handleSessionClick(e) {
         const newSessionTime = this.props.sessionTime;
+        //const newCurrentTime = this.props.currentTime;
 
         switch (e.target.id) {
             case "session-increment":
+                //newCurrentTime.add(1, 'minutes');
                 newSessionTime.add(1, 'minutes');
                 break;
             case "session-decrement":
+                //newCurrentTime.subtract(1, 'minutes');
                 newSessionTime.subtract(1, 'minutes');
                 break;
         }
 
+        /*if (this.props.currentTime.get('minutes') < 0) {
+            this.props.currentTime.add(1, 'minutes')
+    } */
+
+
         if (this.props.sessionTime.get('minutes') < 0) {
             this.props.sessionTime.add(1, 'minutes')
         }
+
 
         this.props.changeSessionTime(newSessionTime);       
     }
@@ -50,13 +59,6 @@ class TimerSettings extends Component {
 
     }
 
-
-    //determine whether "timer-label" says "SESSION" or "BREAK"
-    //add two spaces (\xa0) to 'BREAK' string so that it appears centered in same way as 'SESSION' does (another way to do this?)    
-    chooseTimerLabel() {
-        return this.props.label === 'SESSION' ? 'SESSION' : '\xa0\xa0' + 'BREAK'
-    }
-
     render() {
         return (
             <div className="text-center timer-settings">
@@ -68,12 +70,12 @@ class TimerSettings extends Component {
                 </div>
                 <div className="row settings-row">
                     <div className="col-xs-1 btn btn-primary" id="break-increment" onClick={this.handleBreakClick}>+</div>
-                    <div className="col-xs-1" id="session-label">BREAK:&nbsp;</div>
-                    <div className="col-xs-1" id="session-length">{this.props.breakTime.get('minutes')}:00&nbsp;</div>
+                    <div className="col-xs-1" id="break-label">BREAK:&nbsp;</div>
+                    <div className="col-xs-1" id="break-length">{this.props.breakTime.get('minutes')}:00&nbsp;</div>
                     <div className="col-xs-1 btn btn-primary" id="break-decrement" onClick={this.handleBreakClick}>-</div> 
                 </div>
                 <div className="row settings-row">
-                    <div className="col-md-1 text-primary text-center font-weight-bold" id="timer-label">{this.chooseTimerLabel()}</div>
+                    <div className="col-md-1 text-primary text-center font-weight-bold" id="timer-label">{this.props.label}</div>
                 </div>
             </div>
         )   

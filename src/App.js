@@ -1,23 +1,13 @@
 import React, { Component } from 'react';
 import moment from 'moment';
 import './App.scss';
+import TimerHeader from './TimerHeader';
 import TimerSettings from './TimerSettings';
 import TimerDisplay from './TimerDisplay';
 import TimerControls from './TimerControls';
 import TimerFooter from './TimerFooter';
 
 //https://www.youtube.com/watch?v=3gPbn5LaU_8 1.09th minute
-
-//how to get sessionTime and breakTime to reset to starting values once the clock completes? Possible solution:
-//1. create currentTime in state, set it to moment.duration(25, 'minutes')
-//2. pass currentTime into TimerDisplay and TimerSettings
-//3. in TimerSettings, adjust HandleSessionClick to increase currentTime, as well as sessionTime
-//4. in TimerDisplay, make currentTime the value returned in render (as opp'd to the chooseTimer() function currently there)
-//5. in parent App, adjust countdown() so that currentTime is set to session/break dep. on this.state.label, then currentTime (NOT sessionTime or breakTime) decrements as timer runs
-
-//how to get audio to play at end? 
-//1. Write playSound() function, bind it to constructor
-//2. Have playSound() activate right before switchLabel(), as part of the countdown() function when time === 0
 
 class App extends Component {
   constructor(props) {
@@ -35,39 +25,46 @@ class App extends Component {
     this.changeSessionTime = this.changeSessionTime.bind(this);
     this.changeBreakTime = this.changeBreakTime.bind(this);
     this.switchLabel = this.switchLabel.bind(this);
+    this.switchTimer = this.switchTimer.bind(this);
     this.startTimer = this.startTimer.bind(this);
     this.stopTimer = this.stopTimer.bind(this);
     this.resetTimer = this.resetTimer.bind(this);
     this.countdown = this.countdown.bind(this);
+    this.playAudio = this.playAudio.bind(this);
   }
+
+  //new function to set currentTime to either sessionTime or breakTime based on label?
 
   //change the session and/or break times that are displayed
   changeSessionTime(newSessionTime) {
-    if (this.state.running) {
-      return //this should make it impossible to increment/decrement while clock is running. Why doesn't it? 
-    } else {
       this.setState({
+        currentTime: !this.state.running && this.state.label === 'SESSION' ? newSessionTime.clone() : this.state.currentTime,
         sessionTime: newSessionTime
       })
-    }
+   
   }
 
   changeBreakTime(newBreakTime) {
-    if (this.state.running) {
-      return
-    } else {
       this.setState({
+        currentTime: !this.state.running && this.state.label === 'BREAK' ? newBreakTime.clone() : this.state.currentTime,
         breakTime: newBreakTime
       })
-    }
   }
 
   //change the clock setting when an active timer hits 0
   switchLabel() {
     this.setState({
-      label: this.state.label === 'SESSION' ? 'BREAK' : 'SESSION',
+      label: this.state.label === 'SESSION' ? '\xa0' +  'BREAK' : 'SESSION'
     })
   }
+
+  //change the timer from session to break when an active timer hits 0
+  switchTimer() {
+    this.setState({
+      currentTime: this.state.label === 'SESSION' ? this.state.sessionTime.clone() : this.state.breakTime.clone()
+    })
+  }  
+
 
   //start the timer when start button is clicked
   startTimer() {
@@ -100,6 +97,7 @@ class App extends Component {
     const interval = this.state.timer
     
     this.setState({
+      currentTime: moment.duration(25, 'minutes'),
       sessionTime: moment.duration(25, 'minutes'),
       breakTime: moment.duration(5, 'minutes'),
       label: 'SESSION',
@@ -108,38 +106,34 @@ class App extends Component {
     })
   }
 
-  //reduce timer by the second when running === true; what if I put a new value (currentTime) into state, and set break/session based on which clock is active??
+  //reduce timer by the second when running === true
   countdown() {
-    var timeLeft = this.state.label === 'SESSION' ? this.state.sessionTime : this.state.breakTime 
-    
-    if (this.state.running && this.state.label === 'SESSION') {
-      const runningSessionTime = moment.duration(this.state.sessionTime)
-      runningSessionTime.subtract(1, 'second')
-
+    if (this.state.running) {
       this.setState({
-        sessionTime: runningSessionTime
+        currentTime: this.state.currentTime.subtract(1, 'seconds')
       })
-    } else if (this.state.running && this.state.label === 'BREAK') {
-      const runningBreakTime = moment.duration(this.state.breakTime)
-      runningBreakTime.subtract(1, 'second')
+  }
 
-      this.setState({
-        breakTime: runningBreakTime
-      })
-    }
-
-    if (this.state.running && timeLeft.get('minutes') === 0 && timeLeft.get('seconds') === 0) {
+    if (this.state.running && this.state.currentTime.get('minutes') <= 0 && this.state.currentTime.get('seconds') <= 0)  {
+      this.playAudio();
       this.switchLabel();
+      this.switchTimer();
     }
 
   }
+
+ playAudio() {
+   const beep = document.getElementById("beep");
+   beep.play();
+ }
 
 
   render() {
     return (
       <div className="container-fluid container-clock">
+        <TimerHeader />
         <TimerSettings currentTime={this.state.currentTime} sessionTime={this.state.sessionTime} breakTime={this.state.breakTime} label={this.state.label} running={this.props.running} changeSessionTime={this.changeSessionTime} changeBreakTime={this.changeBreakTime}/>
-        <TimerDisplay currentTime={this.state.currentTime} sessionTime={this.state.sessionTime} breakTime={this.state.breakTime} label={this.state.label} />
+        <TimerDisplay currentTime={this.state.currentTime} />
         <TimerControls startTimer={this.startTimer} stopTimer={this.stopTimer} resetTimer={this.resetTimer}/>
         <TimerFooter />
       </div>
