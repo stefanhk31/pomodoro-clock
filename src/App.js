@@ -7,8 +7,6 @@ import TimerDisplay from './TimerDisplay';
 import TimerControls from './TimerControls';
 import TimerFooter from './TimerFooter';
 
-//https://www.youtube.com/watch?v=3gPbn5LaU_8 1.09th minute
-
 class App extends Component {
   constructor(props) {
     super(props)
