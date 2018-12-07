@@ -1,3 +1,5 @@
+Pomodoro Clock. Can set session timer and break timer, and switch between the two. 
+
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 Below you will find some information on how to perform common tasks.<br>
