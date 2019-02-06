@@ -10,25 +10,17 @@ class TimerSettings extends Component {
     }
 
     //increment/decrement session and break times when user clicks + and - buttons
-    //handleSessionClick has to update currentTime, as well, so that main clock will reflect initial adjustments
     handleSessionClick(e) {
         const newSessionTime = this.props.sessionTime;
-        //const newCurrentTime = this.props.currentTime;
 
         switch (e.target.id) {
             case "session-increment":
-                //newCurrentTime.add(1, 'minutes');
                 newSessionTime.add(1, 'minutes');
                 break;
             case "session-decrement":
-                //newCurrentTime.subtract(1, 'minutes');
                 newSessionTime.subtract(1, 'minutes');
                 break;
         }
-
-        /*if (this.props.currentTime.get('minutes') < 0) {
-            this.props.currentTime.add(1, 'minutes')
-    } */
 
 
         if (this.props.sessionTime.get('minutes') < 0) {

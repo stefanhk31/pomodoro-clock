@@ -7,18 +7,22 @@ import TimerDisplay from './TimerDisplay';
 import TimerControls from './TimerControls';
 import TimerFooter from './TimerFooter';
 
+const initSession = 25;
+const initBreak = 5;
+const initLabel = 'SESSION';
+
 class App extends Component {
   constructor(props) {
     super(props)
     //set parent state w/default durations, clock set to 'SESSION', and not running
     this.state = {
-      currentTime: moment.duration(0, 'minutes'),
-      sessionTime: moment.duration(25, 'minutes'),
-      breakTime: moment.duration(5, 'minutes'),
-      label: 'SESSION',
+      currentTime: moment.duration(initSession, 'minutes'),
+      sessionTime: moment.duration(initSession, 'minutes'),
+      breakTime: moment.duration(initBreak, 'minutes'),
+      label: initLabel,
       running: false,
-      timer: null 
-    } 
+      timer: null
+    };
     
     this.changeSessionTime = this.changeSessionTime.bind(this);
     this.changeBreakTime = this.changeBreakTime.bind(this);
@@ -86,26 +90,26 @@ class App extends Component {
     if (!this.state.running) {
       return
     } else {
-      const interval = this.state.timer
-
+      let interval = this.state.timer
+      
       this.setState({
         running: false,
-        timer: clearInterval(interval) 
+        timer: clearInterval(interval)
       })
     }
   }
 
   //reset the timer when reset button is clicked
   resetTimer() {
-    const interval = this.state.timer
-    
+    let interval = this.state.timer
+
     this.setState({
-      currentTime: moment.duration(25, 'minutes'),
-      sessionTime: moment.duration(25, 'minutes'),
-      breakTime: moment.duration(5, 'minutes'),
-      label: 'SESSION',
+      currentTime: moment.duration(initSession, 'minutes'),
+      sessionTime: moment.duration(initSession, 'minutes'),
+      breakTime: moment.duration(initBreak, 'minutes'),
+      label: initLabel,
       running: false,
-      timer: clearInterval(interval)  
+      timer: clearInterval(interval)
     })
   }
 
