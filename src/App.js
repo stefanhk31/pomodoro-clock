@@ -17,9 +17,9 @@ class App extends Component {
       breakTime: moment.duration(5, 'minutes'),
       label: 'SESSION',
       running: false,
-      timer: null 
-    } 
-    
+      timer: clearInterval(this.props.timer)
+    }
+
     this.changeSessionTime = this.changeSessionTime.bind(this);
     this.changeBreakTime = this.changeBreakTime.bind(this);
     this.switchLabel = this.switchLabel.bind(this);
@@ -30,8 +30,6 @@ class App extends Component {
     this.countdown = this.countdown.bind(this);
     this.playAudio = this.playAudio.bind(this);
   }
-
-  //new function to set currentTime to either sessionTime or breakTime based on label?
 
   //change the session and/or break times that are displayed
   changeSessionTime(newSessionTime) {
@@ -81,28 +79,19 @@ class App extends Component {
     if (!this.state.running) {
       return
     } else {
-      const interval = this.state.timer
 
       this.setState({
         running: false,
-        timer: clearInterval(interval) 
+        timer: clearInterval(this.state.timer) 
       })
     }
   }
-
+  
   //reset the timer when reset button is clicked
   resetTimer() {
-    const interval = this.state.timer
-    
-    this.setState({
-      currentTime: moment.duration(25, 'minutes'),
-      sessionTime: moment.duration(25, 'minutes'),
-      breakTime: moment.duration(5, 'minutes'),
-      label: 'SESSION',
-      running: false,
-      timer: clearInterval(interval)  
-    })
-  }
+    const baseTime = this.state;  
+    this.setState(baseTime);
+  } 
 
   //reduce timer by the second when running === true
   countdown() {
