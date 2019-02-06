@@ -61,7 +61,7 @@ class TimerSettings extends Component {
 
     render() {
         return (
-            <div className="timer-settings">
+            <div className="text-center timer-settings">
                 <div className="row settings-row">
                     <div className="col-xs-1 btn btn-primary" id="session-increment" onClick={this.handleSessionClick}>+</div> 
                     <div className="col-xs-1" id="session-label">SESSION:&nbsp;</div>
@@ -75,7 +75,7 @@ class TimerSettings extends Component {
                     <div className="col-xs-1 btn btn-primary" id="break-decrement" onClick={this.handleBreakClick}>-</div> 
                 </div>
                 <div className="row settings-row">
-                    <div className="col-md-1 text-primary font-weight-bold" id="timer-label">{this.props.label}</div>
+                    <div className="col-md-1 text-primary text-center font-weight-bold" id="timer-label">{this.props.label}</div>
                 </div>
             </div>
         )   

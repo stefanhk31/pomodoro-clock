@@ -26,6 +26,11 @@ body {
         #break-label {
             padding: 0 .5em;
         }
+        #timer-label {
+            @media screen and (max-width: 600px) {
+                text-align: center;
+            }
+        }
     }
     .display-row {
         padding-bottom: .5em;
